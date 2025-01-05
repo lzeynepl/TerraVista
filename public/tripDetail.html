@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan a New Trip - TerraVista</title>
+  <link rel="stylesheet" href="/style/navbar.css" type="text/css">
+
+  <!-- Icons  -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=delete" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .header {
+      height: 15vh;
+      width: 100%;
+      background-color: #000;
+      padding: 10px 30px;
+      position: fixed;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+    }
+    .header img {
+      height: 80px;
+      cursor: pointer;
+    }
+    .main-container {
+      display: relative;
+      margin-top: 9rem;
+      margin-bottom: 3rem;
+      width: 90%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      font-size: 36px;
+      font-weight: 600;
+      color: #333;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      outline: none;
+    }
+    .form-group textarea {
+      resize: none;
+      height: 100px;
+    }
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .save-btn,
+    .cancel-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .save-btn {
+      background: #007bff;
+      color: #fff;
+    }
+    .save-btn:hover {
+      background: #0056b3;
+    }
+    .cancel-btn {
+      background: #ff6600;
+      color: #fff;
+    }
+    .cancel-btn:hover {
+      background: #cc5200;
+    }
+    .trip-object-card{
+      margin-top: 20px;
+      padding: 10px;
+      background: #ebebeb;
+      border-radius: 5px;
+      border: 2px solid #d0d0d0;
+    }
+    .row{
+      position: relative;
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .travel-stop-element{
+      margin-top: calc(1.25% + 8px);
+      padding: 2.5% calc(1.5% + 5px);
+      background: #e0e0e0;
+      border-radius: 5px;
+      border: 2px solid #cfcfcf;
+    }
+    .remove-object-btn{
+      background: #ff6600;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: all 0.3s ease-out;
+    }
+    .remove-object-btn:hover{
+      background: #d70000;
+      box-shadow:rgba(0, 0, 0, 0.5) 0 0 5px;
+    }
+    .comment{
+      display: flex;
+      flex: 1 1 100%;
+      min-height: calc(5vh + 10px);
+      max-height: 100%;
+      height: auto;
+      padding: 1rem 0.5rem; 
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .comment:not(:last-child) {
+      border-bottom: 1px solid #e4e4e4;
+      margin-bottom: calc(0.7vh + 5px);
+    }
+    .comment p{
+      text-wrap: wrap;
+      text-overflow: ellipsis;
+      word-break: break-word;
+      height: 100%;
+      max-width: 70%;
+      margin-right: 1rem;
+      font-size: 0.8rem;
+      color: #6c6c6c;
+      font-weight: 200;
+    }
+    .comment > .col > span{
+      font-size: 0.8rem;
+      color: #2b2b2b;
+      font-weight: 600;
+    }
+    .comment .col{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-width: 15%;
+      width: auto;
+      max-width: 50%;
+      height: 100%;
+    }
+    .comment button{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px !important;
+      border: 1px solid #ff6600 !important;
+      outline: none !important;
+      padding: 0.2rem;
+    }
+    .comment-delete-btn{
+      font-size: 0.9rem !important;
+      color: #ff6600 !important;
+      cursor: pointer !important;
+      transition: all 0.3s ease-out;      
+    }
+    .comment button:hover{
+      background: #ff6600;
+      box-shadow:rgba(0, 0, 0, 0.5) 0 0 5px;
+      & > .comment-delete-btn{
+        color: #fff !important;
+      }
+    }
+    #show-delete-modal-btn{
+      position: absolute;
+      right: 5%;
+      padding: 1rem;      
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 20px;
+      max-height: 45%;
+      font-size : 70%;
+      border-radius: 5px;
+      border: 1px solid #ff6600;
+      color: #ff6600;
+      letter-spacing: 1px;
+      cursor: pointer; 
+      transition: all 0.3s ease-out;
+    }
+    #show-delete-modal-btn span{
+      font-size: 200%;
+    }
+    #show-delete-modal-btn:hover{
+      background: #ff6600;
+      box-shadow:rgba(0, 0, 0, 0.5) 0 0 5px;
+      color: #fff;
+    }
+    #delete-confirm-modal{
+      display: none;
+      position: fixed;
+      top: 37.5%;
+      left: 25%;
+      width: 50%;
+      height: 25%;
+      background: rgba(231, 231, 231, 0.9);
+      padding: 2rem;
+      border-radius: 10px;
+      z-index: 200;
+    }
+    #trip-state{
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    #trip-state.completed{
+      color: rgb(4, 128, 4);
+    }
+    #trip-state.ongoing{
+      color: rgb(212, 97, 31);
+    }
+    #trip-state.planning{
+      color: rgb(3, 187, 187);
+    }
+    .modal-btn{
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease-out;
+    }
+    .modal-btn:hover{
+      box-shadow:rgba(0, 0, 0, 0.25) 0 0 3px;
+      background: lighten(#007bff, 25%);
+    }
+    #modal-confirm-btn{
+      background: #cc2516;
+      color: #fff;
+    }
+
+    .upload-photo-btn, .add-comment-btn{
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease-out;
+      background: #007bff;
+      color: #fff;
+    }
+    .upload-photo-btn:hover, .add-comment-btn:hover{
+      background: #0056b3;
+      transform: scale(1.025);
+    }
+
+    .photo-section{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex: 1 1 100%;
+      height: auto;
+      max-height: 999vh;
+      padding: 1rem 0 2rem 0;
+      min-height: 30vh;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .trip-entry-container{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1 1 100%;
+      flex-shrink: 1;
+      min-width: 33%;
+      max-width: 50%;
+      min-height: 50vh;
+      max-height: 50vh;
+      width: 50%;
+      flex-basis: 49%;
+    }
+
+    .trip-image-container{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: auto;
+      flex-basis: 75%;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @media screen and (max-width: 768px){
+      .trip-entry-container{
+        width: 75%;
+        min-width: 75%;
+        max-width: 75%;
+      }
+
+      .photo-section{
+        justify-content: center;
+      }
+    }
+
+    .trip-image-container img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-comment-section{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      padding-top: 1rem;
+    }
+    .image-comment-section button{
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease-out;
+      background: #007bff;
+      color: #fff;
+    }
+    .image-comment-section button:hover{
+      background: #0056b3;
+      transform: scale(1.025);
+    }
+    .image-comment-section textarea{
+      margin-top: 0.5rem;
+      width: 100%;
+      resize: none;
+      height: 2.5rem;
+    }
+
+    .delete-trip-image-btn{
+      width: 15%;
+      height: 12.5%;
+      border-radius: 5px;
+      position: absolute;
+      padding: 0.25rem 0.35rem;
+      top: 5px;
+      right: 5px;
+      border: 2px solid white;
+      background-color: rgb(0,0,0,0);
+      color: #fff;
+      transition: all 0.3s ease-out;
+    }
+    .delete-trip-image-btn:hover{
+      background-color: darken(#007bff, 0.5);
+      transform: scale(1.05);
+      border: 2px solid #cdcdcd;
+    }
+    .delete-trip-image-btn:hover img{
+      filter: invert(0.8);
+    }
+    .delete-trip-image-btn img{
+      width: 80%;
+      object-fit: contain;
+      filter: invert(1);
+      transition: all 0.3s ease-out;
+    }
+
+    
+    footer {
+      margin-top: auto;
+      height: 15vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      background: #000;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+    }
+    
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="main.html"><img src="Photo/Logo.jpg" alt="TerraVista Logo"></a>
+    <a href="profile.html" class="cancel-btn">Back to Profile</a>
+  </header>
+
+  <div class="main-container">
+    <div class="row">
+      <h1>Your Trip</h1>
+      <button id="show-delete-modal-btn" onclick="showDeleteConfirmModal()">
+        <span id="trip-delete-btn" class="material-symbols-outlined">
+          delete
+        </span></button>
+    </div>
+    
+    <div id="trip-detail-container">
+      
+    </div>
+    <div id="delete-confirm-modal">
+      <div class="modal-content">
+        <h2>Are you sure you want to delete this trip?</h2>
+        <div class="form-actions">
+          <button class="modal-btn" id="modal-confirm-btn" onclick="deleteTrip()">Yes, Delete</button>
+          <button class="modal-btn" id="modal-cancel-btn" onclick="hideDeleteConfirmModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tripId = localStorage.getItem('tripId');
+    const userId = localStorage.getItem('userId');
+
+    async function fetchTripDetails(){
+      if(!tripId){
+        alert('Invalid trip ID');
+        window.location.href = 'profile.html';
+        return;
+      }
+      if(!userId){
+        alert('Invalid user ID');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const tripDetails = await fetch('http://localhost:3000/api/trip-detail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          tripId,
+          userId
+        })
+      }).then(response => response.json())
+      .then(data => {
+        if(!data.trip){
+          alert('Trip not found');
+          window.location.href = 'profile.html';
+          return;
+        }
+        const tripDetailContainer = document.getElementById('trip-detail-container');
+        tripDetailContainer.innerHTML = `<div class="travel-card">
+                ${data.trip.photoUrl ? `<img src=${data.trip.photoUrl} alt=${data.trip.destination}>` : ''}
+                <div class="travel-card-content">
+                  <h2 id="trip-state" class='${data.trip.state}'>${ data.trip.state}</h2>
+                  <div>
+                    <h3>Destination: </h3>
+                    <span>${data.trip.destination}</span>
+                  </div>
+                  <br>
+                  <div>
+                    <h3>Note: </h3>
+                    <span>${data.trip.notes ? data.trip.notes : "You haven't written any notes yet."}</span>
+                  </div>
+                  <div>
+                    <h3> Budget: </h3>
+                    <span>${data.trip.budget ? `$${data.trip.budget}` : "No budget is defined."}</span>
+                  <br>
+                  <div>
+                    <h3>Trip Start Date: </h3>
+                    <span>${formatDate(data.trip.startDate)}</span>
+                    <h3> Trip End Date: </h3>
+                    <span>${formatDate(data.trip.endDate)}</span>
+                  </div>
+
+                  <br>
+                  <hr>
+                  <br>
+
+                  <br>
+
+                  <div class='row'>
+                    <h2>Photos</h2>
+                    <div class="form-group">
+                      <input type="file" accept="image/*" class="photo-input" onchange="triggerUpload(event, this)" hidden>
+                      <button class='upload-photo-btn' onclick="triggerUploadClick(this)">Upload Photo</button>
+                    </div>
+
+                    
+                  </div>
+
+                  <div class="photo-section">
+                      ${data.trip.photos 
+                      ? data.trip.photos.map(photo => {
+                        return `<img src="${photo.url}" alt="Photo">`;
+                      }).join('') 
+                      : ''}
+                  </div>
+                  
+                  <hr>
+                  <br>
+
+                  <h2> Comments </h2>
+
+                  <div class="form-group">
+                    <textarea rows="2" placeholder="Add a general comment for this trip..."></textarea>
+                    <button class='add-comment-btn' onclick="addComment(event, this)">Add Comment</button>
+                  </div>
+                  <div id="comment-section" class="comment-section">
+                  </div>
+
+                  
+                </div>
+              </div>`;
+
+        if(data.trip.hotels !== null && data.trip.hotels.length > 0){
+          const hotelContainer = document.createElement('div');
+          hotelContainer.id = 'hotels';
+          hotelContainer.classList.add('trip-object-card');
+          hotelContainer.innerHTML = "<h2>Hotels</h2>";
+          data.trip.hotels.forEach(hotel => {
+            const hotelElement = document.createElement('div');
+            hotelElement.classList.add("travel-stop-element");
+            hotelElement.innerHTML = `
+            <div class="row"> 
+              <h3>${hotel.name}</h3>
+              <button class="remove-object-btn" onclick="removeObjectFromTrip('${hotel._id}')"> Remove </button>
+            </div>
+            <p>
+              ${hotel.address}
+            </p>`;
+            hotelContainer.appendChild(hotelElement);
+          });
+          tripDetailContainer.appendChild(hotelContainer);
+        }
+        if(data.trip.restaurants !== null && data.trip.restaurants.length > 0){
+          const restaurantContainer = document.createElement('div');
+          restaurantContainer.id = 'restaurants';
+          restaurantContainer.classList.add('trip-object-card');
+          restaurantContainer.innerHTML = "<h2>Restaurants</h2>";
+          data.trip.restaurants.forEach(restaurant => {
+            const restaurantElement = document.createElement('div');
+            restaurantElement.classList.add("travel-stop-element");
+            restaurantElement.innerHTML = `
+            <div class="row"> 
+              <h3>${restaurant.name}</h3>
+              <button class="remove-object-btn" onclick="removeObjectFromTrip('${restaurant._id}')"> Remove </button>
+            </div>
+            <p>
+              ${restaurant.address}
+            </p>`;
+            restaurantContainer.appendChild(restaurantElement);
+          });
+          tripDetailContainer.appendChild(restaurantContainer);
+        }
+        if(data.trip.landmarks !== null && data.trip.landmarks.length > 0){
+          const landmarkContainer = document.createElement('div');
+          landmarkContainer.id = 'landmarks';
+          landmarkContainer.classList.add('trip-object-card');
+          landmarkContainer.innerHTML = "<h2>Landmarks</h2>";
+          data.trip.landmarks.forEach(landmark => {
+            const landmarkElement = document.createElement('div');
+            landmarkElement.classList.add("travel-stop-element");
+            landmarkElement.innerHTML = `
+            <div class="row"> 
+              <h3>${landmark.name}</h3>
+              <button class="remove-object-btn" onclick="removeObjectFromTrip('${landmark._id}')"> Remove </button>
+            </div>
+            <p>
+              ${landmark.address}
+            </p>`;
+            landmarkContainer.appendChild(landmarkElement);
+          });
+          tripDetailContainer.appendChild(landmarkContainer);
+        }
+      })
+      .catch(error => {
+        console.error('Fetch trip details error:', error);
+      });
+    }
+
+    async function removeObjectFromTrip(objectId){
+      const response = await fetch('http://localhost:3000/api/remove-from-trip', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          objectId,
+          tripId
+        })
+      }).then(response => response.json())
+      .then(data => {
+        if(data){
+          alert('Travel stop removed successfully');
+          fetchTripDetails();
+        } else {
+          alert('Failed to remove travel stop');
+        }
+      })
+      .catch(error => {
+        console.error('Remove travel stop error:', error);
+        alert('Failed to remove travel stop');
+      });
+    }
+
+    function triggerUploadClick(button) {
+      const input = button.previousElementSibling;
+      input.click();
+    }
+
+    function generatePhotoToPhotoSection(image=null, imageUrl = null, file=null, comment=null, tripImageId=null) {
+      console.log(`imageUrl: ${imageUrl}\n file: ${file}\n comment: ${comment}\nimage: ${image}`);
+      if(! image && !imageUrl && !file){
+        return;
+      }
+      const photoSection = document.getElementsByClassName('photo-section')[0];
+      const row1 = document.createElement('div');
+      const row2 = document.createElement('div');
+      row1.className = 'row';
+      row2.className = 'row';
+
+      const tripEntryContainer = document.createElement('div');
+      tripEntryContainer.className = 'trip-entry-container';
+
+      const tripImageContainer = document.createElement('div');
+      tripImageContainer.className = 'trip-image-container';
+      
+      const photoCommentWrapper = document.createElement('div');
+      photoCommentWrapper.className = 'image-comment-section';
+
+      const deleteImageButton = document.createElement('button');
+      deleteImageButton.classList.add('delete-trip-image-btn');
+      deleteImageButton.innerHTML = '<img src="Photo/delete.png">'
+      deleteImageButton.onclick = () => {
+        photoSection.removeChild(tripEntryContainer);
+        deleteTripImage(imageUrl);
+      };
+
+      if(imageUrl){
+        tripImageContainer.appendChild(deleteImageButton);
+      }
+
+      const img = document.createElement('img');
+      img.src = image ? image: imageUrl;
+      tripImageContainer.appendChild(img);
+
+      const textarea = document.createElement('textarea');
+      textarea.className = 'photo-comment-input';
+      if(comment){
+        textarea.value = comment;
+      }
+      else {
+        textarea.placeholder = 'Add a comment for this photo...';
+      }
+      textarea.rows = 2;
+
+      const commentContainer = document.createElement('div');
+      commentContainer.className = 'trip-image-comment';
+
+      const editCommentButton = document.createElement('button');
+      const editTextArea = document.createElement('textarea');
+      editTextArea.className = 'photo-comment-edit';
+      editTextArea.value = textarea.value.trim();
+      editCommentButton.textContent = 'Edit Comment';
+      editCommentButton.onclick = () => {
+        if (editTextArea.value.trim()) {
+          commentContainer.textContent = editTextArea.value.trim();
+          commentContainer.style.display = 'block';
+        }
+      };
+
+      const deleteCommentButton = document.createElement('button');
+      deleteCommentButton.textContent = 'Delete Comment';
+      deleteCommentButton.onclick = () => {
+        textarea.style.display = 'block';
+        textarea.value = '';
+        addCommentButton.style.display = 'block';
+        photoCommentWrapper.removeChild(commentContainer);
+        row1.removeChild(editCommentButton);
+        row1.removeChild(deleteCommentButton);
+        row2.removeChild(editTextArea);
+      };
+
+      const saveButton = document.createElement('button');
+      saveButton.classList.add('save-trip-image-btn');
+      saveButton.textContent = 'Save';
+      saveButton.onclick = (event) => uploadTripImageAndComment(event, file, tripImageId);
+
+      const addCommentButton = document.createElement('button');
+      addCommentButton.textContent = 'Add Comment';
+      addCommentButton.onclick = () => {
+        if (textarea.value.trim()) {
+          commentContainer.textContent = textarea.value.trim();
+          photoCommentWrapper.appendChild(commentContainer);
+          textarea.style.display = 'none';
+          addCommentButton.style.display = 'none';
+
+          row2.appendChild(editTextArea);
+          row1.appendChild(editCommentButton);
+          row1.appendChild(deleteCommentButton);
+          }
+        };
+
+      if(comment){
+        commentContainer.textContent = comment;
+        photoCommentWrapper.appendChild(commentContainer);
+
+        addCommentButton.style.display = 'none';
+        row2.appendChild(editTextArea);
+        row1.appendChild(editCommentButton);
+        row1.appendChild(deleteCommentButton);
+      }
+      else{
+        row1.appendChild(addCommentButton);
+        row2.appendChild(textarea);
+      }
+
+      row1.appendChild(saveButton);
+
+      tripEntryContainer.appendChild(tripImageContainer);
+      photoCommentWrapper.appendChild(row1);
+      photoCommentWrapper.appendChild(row2);
+      tripEntryContainer.appendChild(photoCommentWrapper);
+      photoSection.appendChild(tripEntryContainer);
+      
+    }
+
+    function triggerUpload(event, input) {
+      const inputFile = input.files[0];
+      if (inputFile) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          
+          generatePhotoToPhotoSection(image=e.target.result, null, inputFile);
+        };
+        reader.readAsDataURL(inputFile);
+      }
+      input.value = ''; 
+    }
+
+    async function deleteTripImage(imageUrl){
+      const response = await fetch('http://localhost:3000/api/delete-trip-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          imageUrl,
+        })
+      }).then(response => response.json())
+      .catch(error => {
+        console.error('Delete trip image error:', error);
+        alert('Failed to delete trip image');
+      });
+    }
+
+    function uploadTripImageAndComment(event, file, tripImageId=null){
+      const image = file;
+      let comment;
+      try{
+        comment = event.target.closest('.image-comment-section').querySelector('.trip-image-comment').textContent;
+      }catch(e){
+        comment = "";
+      }
+      
+      if(!comment) comment = "";
+      const formData = new FormData();
+      formData.append('image', image);
+      formData.append('tripId', tripId);
+      formData.append('tripImageId', tripImageId);
+      formData.append('imageComment', comment);
+
+      fetch('http://localhost:3000/api/add-trip-photo-and-comment', {
+        method: 'POST',
+        body: formData
+      }).then(response => response.json())
+      .then(data => {
+        if(data){
+          alert('Photo uploaded successfully');
+
+        } else {
+          alert('Failed to upload photo');
+        }
+      })
+      .catch(error => {
+        console.error('Upload trip photo error:', error);
+        alert('Failed to upload photo');
+      });
+    }
+
+    function addComment(event, button) {
+      const textarea = button.previousElementSibling;
+      const commentText = textarea.value.trim();
+      if (commentText) {
+        sendComment(commentText);
+      }
+    }
+
+    function showDeleteConfirmModal(){
+      const modal = document.getElementById('delete-confirm-modal');
+      modal.style.display = 'block';
+    }
+
+    function hideDeleteConfirmModal(){
+      const modal = document.getElementById('delete-confirm-modal');
+      modal.style.display = 'none';
+    }
+
+    async function sendComment(content){
+      if(!userId){
+        window.location.href = 'login.html';
+        return;
+      }
+      const response = await fetch('http://localhost:3000/api/add-comment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          content,
+          userId,
+          tripId
+        })
+      }).then(response => response.json())
+      .then(data => {
+        if(data){
+          fetchComments();
+        } else {
+          console.error("Failed to add comment: ");
+        }
+      })
+    }
+
+    async function fetchTripImages(){
+      const response = await fetch('http://localhost:3000/api/fetch-trip-images', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          tripId
+        })
+      }).then(response => response.json())
+      .then(data => {
+        if(data){
+          data.tripImages.forEach(tripImage => {
+            console.log(tripImage);
+            generatePhotoToPhotoSection(image=null, imageUrl=tripImage.url, file=null, comment=tripImage.comment, tripImageId = tripImage._id);
+          });
+        } else {
+          console.error("Failed to fetch trip images: ");
+        }
+      }).catch(error => {
+        console.error('Fetch trip images error:', error);
+      });
+    }
+
+    async function fetchComments(){
+      const response = await fetch('http://localhost:3000/api/fetch-comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          tripId
+        })
+      }).then(response => response.json())
+      .then(data => {
+        if(data){
+          const commentSection = document.getElementById('comment-section');
+          commentSection.innerHTML = '';
+          const commentHeader = document.createElement('h3');
+          commentHeader.textContent = 'Your comments';
+          commentSection.appendChild(commentHeader);
+          
+          data.comments.forEach(comment => {
+            
+            const commentElement = document.createElement('div');
+            const col = document.createElement('div');
+            const commentDate = document.createElement('span');
+            const commentContent = document.createElement('p');
+            const deleteCommentBtn = document.createElement('button');
+            deleteCommentBtn.innerHTML = '<span class="material-symbols-outlined comment-delete-btn">delete</span>';
+            deleteCommentBtn.onclick = () => {
+              deleteComment(comment._id);
+            }
+            commentDate.textContent = formatDate(comment.createdAt);
+            commentElement.className = 'comment';
+            col.className = 'col';
+            commentContent.textContent = comment.content;
+            col.appendChild(commentDate);
+            col.appendChild(deleteCommentBtn);
+            commentElement.appendChild(commentContent);
+            commentElement.appendChild(col);
+            
+            commentSection.appendChild(commentElement);
+            
+          });
+        } else {
+          console.error("Failed to fetch comments: ");
+        }
+      })
+    }
+
+    async function deleteComment(commentId){
+      const response = await fetch('http://localhost:3000/api/delete-comment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          commentId
+        })
+      }).then(response => response.json())
+      .then(data => {
+        if(data){
+          fetchComments();
+        } else {
+          console.error("Failed to delete comment: ");
+        }
+      })
+    }
+
+    async function deleteTrip(){
+      const response = await fetch('http://localhost:3000/api/delete-trip', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          tripId,
+          userId
+        })
+      }).then(response => response.json())
+      .then(data => {
+        if(data.message){
+          alert('Trip deleted successfully');
+          window.location.href = 'profile.html';
+        } else {
+          alert('Failed to delete trip');
+        }
+      })
+      .catch(error => {
+        console.error('Delete trip error:', error);
+        alert('Failed to delete trip');
+      });
+      
+      hideDeleteConfirmModal();
+    }
+
+    const formatDate = (date) => {
+      const d = new Date(date);
+      return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+    }
+
+    window.onload = async () => {
+      await fetchTripDetails();
+      await fetchComments();
+      await fetchTripImages();
+    }
+
+  </script>
+
+  <footer>
+    &copy; 2024 TerraVista | Every journey begins with a plan.
+  </footer>
+</body>
+</html>

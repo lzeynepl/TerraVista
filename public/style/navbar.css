@@ -1,0 +1,21 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #000;
+  color: white;
+}
+.header img {
+  height: 100px;
+  cursor: pointer;
+}
+.header nav {
+  display: flex;
+  align-items: center;
+}
+.header nav a {
+  color: white;
+  margin-left: 15px;
+  text-decoration: none;
+}

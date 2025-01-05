@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TerraVista - Explore Destinations</title>
+  <link rel="stylesheet" href="/style/navbar.css" type="text/css">
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add" />
+  
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      overflow-x: hidden;
+    }
+    .page-title {
+      text-align: center;
+      margin: 30px 0;
+      font-size: 28px;
+      font-weight: bold;
+      color: #333;
+    }
+    .filter-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .filter-container select {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+    }
+    .category-section {
+      margin-bottom: 40px;
+    }
+    .category-title {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      padding: 0 40px;
+    }
+    .card {
+      position: relative;
+      width: 300px;
+      min-height: 25vh;
+      height: auto;
+      max-height: 50vh;
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .card-content {
+      padding: 15px;
+      text-align: center;
+    }
+    .card-content h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .card-content p {
+      font-size: 14px;
+      color: #777;
+    }
+    #select-trip-modal{
+      display: none;
+      justify-content: space-around;
+      align-items: center;
+      position: fixed;
+      z-index: 99;
+      left: calc(33.5% - 2rem);
+      top: 37.5%;
+      width: 33%;
+      height: 25%;
+      overflow: auto;
+      background: rgba(231, 231, 231, 0.9);
+      padding: 2rem;
+      border-radius: 10px;
+    }
+    .add-to-trip-btn{
+      position: absolute;
+      top: 2.5%;
+      right: 2.5%;
+      display: flex;
+      justify-content: start;
+      align-items: start;
+      background-color: #fdfdfd;
+      color: #007bff;
+      border: 1px solid #007bff;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease-out;
+    }
+    .add-to-trip-btn:hover{
+      background-color: #007bff;
+      color: #fff;
+    }
+    .modal-btn{
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease-out;
+    }
+    .modal-btn:hover{
+      box-shadow:rgba(0, 0, 0, 0.25) 0 0 3px;
+      background: lighten(#007bff, 25%);
+      transition: all 0.3s ease-out;
+    }
+    .select-trip-container{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      height: 100%;
+      width: 70%;
+    }
+    #modal-confirm-btn{
+      background: #007bff;
+      color: #fff;
+    }
+    #modal-confirm-btn.disabled{
+      background: #034e9d; 
+    }
+    #trip-select{
+      width: 90%;
+      padding: 3px 5px;
+    }
+    .row{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+    }
+    .material-symbols-outlined{
+      font-size: 20px;
+      font-weight: 320;
+    }
+    footer {
+      margin-top: auto;
+      height: 15vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      background: #000;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+    }
+    footer p {
+      margin: 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <a href="main.html"><img src="Photo/Logo.jpg" alt="TerraVista Logo"></a>
+</header>
+
+<!-- Page Title -->
+<div class="page-title">Explore Destinations</div>
+
+<!-- Filter Section -->
+<div class="filter-container">
+  <select id="filter-select" onchange="filterCards()">
+    <option value="all">Show All</option>
+    <option value="hotels">Hotels</option>
+    <option value="restaurants">Restaurants</option>
+    <option value="places">Places to Visit</option>
+  </select>
+</div>
+
+<!-- Content Section -->
+<div class="content-section">
+  <!-- Hotels Section -->
+  <div class="category-section" id="hotelsSection">
+    <h2 class="category-title">Hotels</h2>
+    <div class="card-container" id="hotelsContainer">
+      <!-- Hotel cards will be dynamically added here -->
+    </div>
+  </div>
+
+  <!-- Restaurants Section -->
+  <div class="category-section" id="restaurantsSection">
+    <h2 class="category-title">Restaurants</h2>
+    <div class="card-container" id="restaurantsContainer">
+      <!-- Restaurant cards will be dynamically added here -->
+    </div>
+  </div>
+
+  <!-- Places to Visit Section -->
+  <div class="category-section" id="landmarksSection">
+    <h2 class="category-title">Places to Visit</h2>
+    <div class="card-container" id="landmarksContainer">
+      <!-- Places to visit cards will be dynamically added here -->
+    </div>
+  </div>
+</div>
+
+<div id="select-trip-modal">
+  <div class="select-trip-container">
+    <div class="row">
+      <select id="trip-select">
+        <option value="">Select a Trip</option>
+      </select>
+      
+    </div>
+    <div class="row">
+      <button class="modal-btn" onclick="" id="modal-confirm-btn">Add</button>
+      <button class="modal-btn" onclick="closeSelectTripModal()" id="modal-cancel-btn">Cancel</button>
+    </div>
+    
+  </div>
+  
+
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>&copy; 2024 TerraVista - All rights reserved.</p>
+</footer>
+
+<script src="components.js"></script>
+<script>
+
+  const selectedCity = localStorage.getItem("selectedCity");
+
+  const TripObjectType = {
+    hotel: 'hotel',
+    restaurant: 'restaurant',
+    landmark: 'landmark'
+  }
+
+  function updatePageTitle(){
+    const pageTitle = document.querySelector('.page-title');
+    pageTitle.textContent = `Discover locations in ${selectedCity.toUpperCase()}`;
+  }
+
+  // Generate Cards
+  async function generateCards() {
+    const userId = localStorage.getItem('userId');
+    const hotelsContainer = document.getElementById("hotelsContainer");
+    const restaurantsContainer = document.getElementById("restaurantsContainer");
+    const landmarksContainer = document.getElementById("landmarksContainer");
+
+    hotelsContainer.innerHTML = "";
+    restaurantsContainer.innerHTML = "";
+    landmarksContainer.innerHTML = "";
+
+    const hotels = await fetchHotels();
+    const restaurants = await fetchRestaurants();
+    const landmarks = await fetchLandmarks();
+
+    let tripId = null;
+    
+    if(hotels === null || hotels.length === 0){
+      hotelsContainer.innerHTML = "No hotels found";
+    }
+    else{
+      hotelsContainer.innerHTML = hotels.map(hotel => {
+        return `
+          <div class="card">
+            <img src="${hotel.images[0]?.url}" alt="${hotel.name}">
+            <button class="add-to-trip-btn" 
+                    onclick="showSelectTripModal(event, '${hotel._id}', '${TripObjectType.hotel}')"
+                    style="display: ${userId ? 'inline-block': 'none'}">
+              <span class="material-symbols-outlined">
+                add           
+              </span>
+            </button>
+            <div class="card-content">
+              <h3>${hotel.name}</h3>
+              <p>${hotel.description ? hotel.description : ""}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    if(restaurants === null || restaurants.length === 0){
+      restaurantsContainer.innerHTML = "No restaurants found";
+    }
+    else{
+      restaurantsContainer.innerHTML = restaurants.map(restaurant => {
+        return `
+          <div class="card">
+            <img src="${restaurant.images[0]?.url}" alt="${restaurant.name}">
+            <button class="add-to-trip-btn" 
+                    onclick="showSelectTripModal(event, '${restaurant._id}', '${TripObjectType.restaurant}')"
+                    style="display: ${userId ? 'inline-block': 'none'}">
+              <span class="material-symbols-outlined">
+                add           
+              </span></button>
+            <div class="card-content">
+              <h3>${restaurant.name}</h3>
+              <p>${restaurant.description ? restaurant.description : ""}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    if(landmarks === null || landmarks.length === 0){
+      landmarksContainer.innerHTML = "No landmarks found";
+    }
+    else{
+      landmarksContainer.innerHTML = landmarks.map(landmark => {
+        return `
+          <div class="card">
+            <img src="${landmark.images[0]?.url}" alt="${landmark.name}">
+            <button class="add-to-trip-btn" 
+                    onclick="showSelectTripModal(event, '${landmark._id}', '${TripObjectType.landmark}')"
+                    style="display: ${userId ? 'inline-block': 'none'}">
+              <span class="material-symbols-outlined">
+                add           
+              </span></button>
+            <div class="card-content">
+              <h3>${landmark.name}</h3>
+              <p>${landmark.description ? landmark.description : ""}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  async function addObjectToTrip(event, objectId, objectType){
+    const tripId = document.getElementById('trip-select').value;
+    const modalAddBtn = document.getElementById('modal-confirm-btn');
+    if(!tripId || tripId === "Select a Trip"){  
+      modalAddBtn.classList.add('disabled') 
+      return;
+    }
+    else modalAddBtn.classList.remove('disabled');
+    
+    if(objectId===null || !Object.keys(TripObjectType).includes(objectType) || tripId===null) return;
+    const response = await fetch('http://localhost:3000/api/add-to-trip', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        objectId,
+        tripId,
+        objectType
+      })
+    }).then(response => response.json())
+    .then(data => {
+      if(data.success){
+        event.target.classList.add('added');
+      }
+    })
+    .catch(error => {
+      console.error('Add object to trip error:', error);
+    });
+
+    closeSelectTripModal();
+  }
+
+  async function populateTripDropdown(objectId=null) {
+    const tripSelect = document.getElementById('trip-select');
+    const modalAddBtn = document.getElementById('modal-confirm-btn');
+    !tripSelect.value || tripSelect.value === "Select a Trip" ? 
+      modalAddBtn.classList.add('disabled') : 
+      modalAddBtn.classList.remove('disabled');
+
+    const localTrips = localStorage.getItem("trips");
+    let trips = null;
+    if(!localTrips || localTrips.length === 0){
+      trips = await fetchTrips();
+    }
+    else{
+      trips = localTrips;
+    }
+    trips = await trips.filter(trip => trip.destination === selectedCity);
+
+    tripSelect.innerHTML = '<option value="" disabled selected>Select a Trip</option>';
+
+    trips.forEach(trip => {
+      const option = document.createElement('option');
+      option.value = trip._id;
+      let isAlreadyAdded = false;
+      if(objectId){
+        trip.hotels.concat(trip.restaurants, trip.landmarks).forEach(tripObjectId => {
+          if(tripObjectId === objectId){
+            isAlreadyAdded = true;
+          }
+        })
+      }
+      if(isAlreadyAdded){
+        option.disabled = true;
+      }
+
+      option.textContent = `
+        at ${trip.destination} with ${trip.numTravelers} people
+        ${isAlreadyAdded ? ' (Already Added)' : ''}`;
+      tripSelect.appendChild(option);
+    });
+  }
+
+  function showSelectTripModal(event, objectId, tripObjectType){
+    populateTripDropdown(objectId);
+    const modal = document.getElementById('select-trip-modal');
+    modal.style.display = 'flex';
+    const button = document.getElementById("modal-confirm-btn");
+    button.addEventListener('click', (event) => {
+      addObjectToTrip(event, objectId, tripObjectType)
+    });
+  }
+
+  function closeSelectTripModal(){
+    const modal = document.getElementById('select-trip-modal');
+    const button = document.getElementById("modal-confirm-btn");
+    modal.style.display = 'none';
+    button.removeEventListener('click', addObjectToTrip);
+  }
+
+  function filterCards() {
+    const filter = document.getElementById("filter-select").value;
+    document.getElementById("hotelsSection").style.display = filter === "all" || filter === "hotels" ? "block" : "none";
+    document.getElementById("restaurantsSection").style.display = filter === "all" || filter === "restaurants" ? "block" : "none";
+    document.getElementById("landmarksSection").style.display = filter === "all" || filter === "places" ? "block" : "none";
+  }
+
+  async function fetchTrips(){
+    let trips = null;
+    const userId = localStorage.getItem('userId');
+    
+    const response = await fetch('http://localhost:3000/api/fetch-trips', { 
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if(!data.trips) return;
+      trips = data.trips;
+    }).catch(error => {
+      console.log("Fetch trip error: ", error);
+    });
+    return trips;
+  }
+
+  async function fetchHotels(){
+    let hotels = null;
+    const response = await fetch('http://localhost:3000/api/fetch-hotels', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }})
+      .then(response => response.json())
+      .then(data => {
+        hotels = data.hotels.filter(hotel => hotel.city === selectedCity);
+      })
+      .catch(error => {
+        console.error('Fetch hotel error:', error);
+      });
+    
+      return hotels;
+    
+  }
+
+  async function fetchRestaurants(){
+    let restaurants = null;
+    const response = await fetch('http://localhost:3000/api/fetch-restaurants', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }})
+      .then(response => response.json())
+      .then(data => {
+        restaurants = data.restaurants.filter(restaurant => restaurant.city === selectedCity);
+      })
+      .catch(error => {
+        console.error('Fetch restaurant error:', error);
+      });
+    
+      return restaurants;
+    
+  }
+
+  async function fetchLandmarks(){
+    let landmarks = null;
+    const response = await fetch('http://localhost:3000/api/fetch-landmarks', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }})
+      .then(response => response.json())
+      .then(data => {
+        landmarks = data.landmarks.filter(landmark => landmark.city === selectedCity);
+      })
+      .catch(error => {
+        console.error('Fetch landmark error:', error);
+      });
+    
+      return landmarks;
+  }
+
+  // Load Initial Cards
+  window.onload = () => {
+    generateCards();
+    addNavbarUtility();
+    populateTripDropdown();
+    updatePageTitle();
+  };
+</script>
+
+</body>
+</html>

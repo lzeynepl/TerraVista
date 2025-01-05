@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to TerraVista</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        header {
+            margin-bottom: 20px;
+        }
+        .logo {
+            max-width: 300px;
+            height: auto;
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 600;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            font-weight: 300;
+        }
+        .button-container {
+            margin-top: 30px;
+        }
+        .enter-button {
+            text-decoration: none;
+            color: #fff;
+            padding: 15px 30px;
+            background: #333;
+            border: 2px solid #fff;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .enter-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="Photo/Logo.jpg" alt="TerraVista Logo" class="logo">
+    </header>
+    <main>
+        <h1>Welcome to TerraVista</h1>
+        <p>Your ultimate travel planning companion</p>
+        <div class="button-container">
+            <button class="enter-button" onclick="location.href='main.html'">Enter TerraVista</button>
+        </div>
+    </main>
+    <footer>
+        <p>© 2024 TerraVista | All rights reserved</p>
+    </footer>
+</body>
+</html>

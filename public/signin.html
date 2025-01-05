@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Login Page</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Full width layout */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            color: white;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #000;
+            color: white;
+            position: absolute;
+            top: 0;
+        }
+        .header img {
+            height: 100px;
+            cursor: pointer;
+        }
+
+        /* Main Container */
+        .signin-container {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 120px; /* spacing from header */
+            color: #333;
+        }
+
+        /* Title */
+        .signin-container h1 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Label Styles */
+        .signin-container label {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+
+        /* Input Styles */
+        .signin-container input[type="email"],
+        .signin-container input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        /* Forgot Password Link */
+        .signin-container .forgot-password {
+            display: block;
+            text-align: left;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .signin-container .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        /* Sign In Button */
+        .signin-container button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 1.5rem;
+            background-color: #000;
+            border: none;
+            border-radius: 30px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        /* Sign In Button Hover */
+        .signin-container button:hover {
+            background-color: #333;
+        }
+
+        /* "Not a member" Section */
+        .signin-container .signup-link-container {
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .signin-container .signup-link-container span {
+            margin: 0 0.5rem;
+        }
+
+        .signin-container .signup-link-container hr {
+            flex: 1;
+            border: none;
+            height: 1px;
+            background-color: #ccc;
+        }
+
+        /* Join Link */
+        .signin-container .signup-link {
+            display: block;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .signin-container .signup-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="main.html"><img src="Photo/Logo.jpg" alt="TerraVista Logo"></a>
+    </header>
+
+    <div class="signin-container">
+        <h1>Welcome back!</h1>
+
+        <form id="signinForm">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+
+            <a href="forgotPassword.html" class="forgot-password">Forgot password?</a>
+
+            <button type="button" onclick="signinUser()">Sign in</button>
+        </form>
+
+        <div class="signup-link-container">
+            <hr>
+            <span>Not a member?</span>
+            <hr>
+        </div>
+        
+        <a href="register.html" class="signup-link">Join</a>
+    </div>
+
+    <script>
+        function isEmailValid(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email validation regex
+            return emailRegex.test(email);
+        }
+
+        async function signinUser() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Validate email format
+            if (!isEmailValid(email)) {
+                alert("Invalid email format. Please include '@' and a domain (e.g., example@example.com).");
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/signin', { // Correct endpoint for login
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const result = await response.json();
+                
+                
+                if (response.ok && result.user) {
+                    localStorage.setItem('firstName', result.user.firstName);
+                    localStorage.setItem('lastName', result.user.lastName);
+                    localStorage.setItem('email', result.user.email);
+                    localStorage.setItem('isAdmin', result.user.isAdmin);
+                    localStorage.setItem('userId', result.user.id);
+                    alert('Sign In successful!');
+                    if (result.user.isAdmin) {
+                        window.location.href = 'adminDashboard.html'; // Admin kullanıcıysa admin dashboard'a yönlendir
+                    } else {
+                        window.location.href = 'profile.html'; // Normal kullanıcı için profile sayfasına yönlendir
+                    }
+                } else {
+                    if (result.message.includes('User not found')) {
+                        alert('Error: User not found. Please register first.');
+                    } else if (result.message.includes('Invalid credentials')) {
+                        alert('Error: Incorrect password. Please try again.');
+                    } else {
+                        alert(result.message || 'Sign In failed.');
+                    }
+                }
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+            }
+        }
+    </script>
+
+</body>
+</html>

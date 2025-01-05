@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile - TerraVista</title>
+  <link rel="stylesheet" href="/style/navbar.css" type="text/css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding-bottom: 20px;
+    }
+    .header {
+      height: 15vh;
+      width: 100%;
+      max-width: 100%;
+      background-color: #000;
+      color: #fff;
+      padding: 10px 30px;
+      position: relative;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+    }
+    .header img {
+        height: 80px;
+        cursor: pointer;
+    }
+    .edit-container {
+      margin-top: 120px;
+      width: 400px;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      color: #333;
+    }
+    .edit-container h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      outline: none;
+    }
+    .form-group textarea {
+      resize: none;
+      height: 100px;
+    }
+    .photo-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .profile-photo-preview {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #ddd;
+      margin-bottom: 10px;
+      background-size: cover;
+      background-position: center;
+      background-image: url('Photo/profile-photo.jpg'); /* Replace with uploaded photo if available */
+    }
+    .photo-btn {
+      padding: 10px 20px;
+      font-size: 14px;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      margin-bottom: 10px;
+      transition: background 0.3s;
+    }
+    .photo-btn:hover {
+      background-color: #0056b3;
+    }
+    .remove-photo-btn {
+      background-color: #ff4d4d;
+    }
+    .remove-photo-btn:hover {
+      background-color: #cc0000;
+    }
+    .save-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+      text-align: center;
+      text-decoration: none;
+    }
+    .save-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="main.html"><img src="Photo/Logo.jpg" alt="TerraVista Logo"></a>
+  </header>
+
+  <div class="edit-container">
+    <h1>Edit Profile</h1>
+    <form enctype="multipart/form-data">
+      <div class="photo-actions">
+        <div class="profile-photo-preview"></div>
+        <label for="uploadPhoto" class="photo-btn">Upload or Change Photo</label>
+        <input type="file" id="uploadPhoto" name="uploadPhoto" accept="image/*" style="display: none;">
+        <button type="button" class="photo-btn remove-photo-btn" onclick="removePhoto()">Remove Photo</button>
+      </div>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name">
+      </div>
+      <div class="form-group">
+        <label for="surname">Surname</label>
+        <input type="text" id="surname" name="surname" placeholder="Enter your surname">
+      </div>
+      <div class="form-group">
+        <label for="birthDate">Birth Date</label>
+        <input type="date" id="birthDate" name="birthDate">
+      </div>
+      <div class="form-group">
+        <label for="Intro">Intro</label>
+        <textarea id="intro" name="Intro" placeholder="Tell us about yourself..."></textarea>
+      </div>
+      <a href="profile.html" onclick="updateProfile()" class="save-btn">Save Changes</a>
+    </form>
+  </div>
+
+  <script src="components.js"></script>
+  <script>
+
+    async function updateProfile() {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        window.location.href = 'signin.html';
+        return;
+      }
+    
+      const formData = new FormData();
+      
+      formData.append('userId', userId);
+      formData.append('name', document.getElementById('name').value);
+      formData.append('surname', document.getElementById('surname').value);
+      formData.append('birthDate', document.getElementById('birthDate').value);
+      formData.append('intro', document.getElementById('intro').value);
+      
+      const photoInput = document.getElementById('uploadPhoto');
+      if (photoInput.files.length > 0) {
+        formData.append('image', photoInput.files[0]);  
+      }
+    
+      try {
+        const response = await fetch('http://localhost:3000/api/update-profile', {
+          method: 'POST',
+          body: formData, 
+        });
+    
+        if (!response.ok) {
+          throw new Error('Failed to upload profile data');
+        }
+    
+        const result = await response.json();
+      } catch (error) {
+        console.error('Error updating profile:', error);
+      }
+    }
+    
+
+    async function removePhoto() {
+      const preview = document.querySelector('.profile-photo-preview');
+      preview.style.backgroundImage = 'none';
+      await deletePhoto();
+      alert('Profile photo removed!');
+    }
+
+    async function deletePhoto(){
+      const userId = localStorage.getItem('userId');
+      if(!userId){
+        window.location.href = 'signin.html';
+        return;
+      }
+      const response = await fetch('http://localhost:3000/api/delete-profile-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          userId: userId 
+        })
+      }).then(res => res.json())
+      .catch(err => {
+        console.error("Error while deleting photo: ", err);
+      });
+    }
+
+    async function loadProfile() {
+      const firstName = localStorage.getItem('firstName');
+      const lastName = localStorage.getItem('lastName');
+      const email = localStorage.getItem('email');
+      const userId = localStorage.getItem('userId');
+
+      if(userId===null) {
+          window.location.href = 'signin.html';
+      }
+
+      const response = await fetch('http://localhost:3000/api/user-profile', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userId })
+      }).then(res => res.json())
+      .then(data => {
+        const introContainer = document.getElementById('intro');
+        const nameContainer = document.getElementById('name');
+        const surnameContainer = document.getElementById('surname');
+        const birthDateContainer = document.getElementById('birthDate');
+        const profilePhotoPreview = document.querySelector('.profile-photo-preview');
+
+        if(data.user.intro === undefined || data.user.intro === null){
+          introContainer.value = `Such empty 0-o.`;
+        }
+        else{
+          introContainer.value = `${data.user.intro}`;
+        }
+
+        nameContainer.value = data.user.firstName;
+        surnameContainer.value = data.user.lastName;
+
+        if (data.user.birthDate) {
+          const birthDate = new Date(data.user.birthDate);
+          birthDateContainer.value = birthDate.toISOString().split('T')[0];
+        } else {
+          birthDateContainer.value = ""; 
+        }
+
+        if(data.profileImageUrl){
+          profilePhotoPreview.style.backgroundImage = `url(${data.profileImageUrl})`;
+        }
+
+      }).catch(err => {
+          console.error("Error while loading profile: ", err);
+      });
+
+  }
+
+  function addListeners(){
+    const uploadPhotoInput = document.getElementById('uploadPhoto');
+    const profilePhotoPreview = document.querySelector('.profile-photo-preview');
+
+    uploadPhotoInput.addEventListener('change', handlePhotoUpload);
+  }
+
+  function handlePhotoUpload(){
+    const uploadPhotoInput = document.getElementById('uploadPhoto');
+    const profilePhotoPreview = document.querySelector('.profile-photo-preview');
+    const file = uploadPhotoInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+      profilePhotoPreview.style.backgroundImage = `url(${e.target.result})`;
+    }
+
+    reader.readAsDataURL(file);
+  }
+
+  window.onload = () => {
+    loadProfile();
+    addNavbarUtility();
+    addListeners();
+  }
+  </script>
+</body>
+</html>

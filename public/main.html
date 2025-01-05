@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraVista - Ana Sayfa</title>
+    <link rel="stylesheet" href="/style/navbar.css" type="text/css">
+
+    <!-- Google Icons-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=headset_mic" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=close" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .header {
+            height: 15vh;
+            width: 100%;
+            max-width: 100%;
+            background-color: #000;
+            color: #fff;
+            padding: 10px 30px;
+            position: relative;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+        }
+        .header img {
+            height: 80px;
+            cursor: pointer;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .hero {
+            position: relative;
+            background-image: url('Photo/back.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            padding: 100px 30px;
+            color: white;
+            text-align: center;
+            height: 50vh;
+            min-height: 30vh;
+            max-height: 50vh;
+            width: 100%;
+        }
+        .hero h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: black;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .search-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+            font-size: 14px;
+            color: #333;
+        }
+        .search-item input, .search-item select {
+            padding: 10px 0;
+            background-color: #e1e1e1; 
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            width: 100%;
+        }
+        .search-container button {
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .section-title {
+            text-align: center;
+            margin: 40px 0;
+            font-size: 28px;
+            color: #333;
+        }
+        .destinations {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 0 30px;
+        }
+        .destination {
+            width: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            text-align: center;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        .destination:hover {
+            transform: scale(1.05);
+        }
+        .destination img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        footer {
+            margin-top: auto;
+            height: 15vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            background: #000;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+          }
+
+        @media (max-width: 768px) {
+            .search-container {
+                flex-direction: column;
+                padding: 20px;
+                width: 90%;
+            }
+            .search-item {
+                width: 100%;
+                text-align: left;
+            }
+            .search-container button {
+                width: 50px;
+                margin: 10px auto 0;
+            }
+            .hero h2 {
+                font-size: 32px;
+                margin-bottom: 20px;
+            }
+        }
+
+        .chatbot-window {
+            width: 25vw;
+            height: 60vh;
+            max-height: 60vh;
+            border: 1px solid #ccc;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            min-height: 0;
+            overflow: hidden;
+            background-color: #fff;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
+        }
+    
+        .chatbot-header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        .chatbot-header button{
+            background-color: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+        }
+
+        .chatbot-header button:hover{
+            color: #ccc;
+        }
+    
+*        .chat-display-section {
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 10px;
+            overflow-y: scroll;
+            background-color: #f9f9f9;
+            font-size: 14px;
+            height: 50vh;
+        }
+    
+        .chat-display-section p {
+            margin: 5px 0;
+        }
+    
+        .chat-display-section .user-message {
+            text-align: right;
+            font-weight: bold;
+            background-color: rgb(245, 165, 80);
+            border-radius: 10px 10px 0 10px;
+            margin-left: auto;
+        }
+    
+        .chat-display-section .bot-message {
+            text-align: left;
+            color: #007bff;
+            background-color: rgb(148, 207, 238);
+            border-radius: 10px 10px 10px 0;
+            margin-right: auto;
+        }
+
+        .user-message, .bot-message{
+            padding: 10px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+    
+        /* Chat Write Section */
+        .chat-write-section {
+            padding: 10px;
+            background-color: #f1f1f1;
+            display: flex;
+            align-items: center;    
+        }
+    
+        .chat-write-section textarea {
+            width: 80%;
+            padding: 10px;
+            font-size: 14px;
+            resize: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    
+        .chat-write-section button {
+            margin-left: 10px;
+            padding: 10px 15px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .chat-write-section button.disabled{
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    
+        .chat-write-section button:hover {
+            background-color: #0056b3;
+        }
+
+        .chatbot-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed; 
+            bottom: 20px;    
+            right: 20px;     
+            z-index: 1000;   
+            cursor: pointer;
+            background-color: rgb(21, 115, 173);
+            border: 3px solid rgb(14, 82, 123);
+            border-radius: 50%;
+            padding: 10px;
+            width: 80px;
+            height: 80px;
+            text-align: center;
+            transition: all 0.3s ease-out;
+        }
+        
+        .chatbot-icon:hover{
+            background-color: rgb(14, 82, 123);
+            transform: scale(1.1);
+        }
+
+        .chatbot-icon:hover>img{
+            width: 80%;
+            filter: invert(0.8);
+        }
+        
+        .chatbot-icon img {
+            width: 75%;
+            filter: invert(1);
+            transition: all 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <img src="Photo/Logo.jpg" alt="TerraVista Logo">
+</header>
+
+<section class="hero">
+    <h2>Plan Your Next Adventure with TerraVista</h2>
+    <div class="search-container">
+        <div class="search-item">
+            <select id="destination">
+                <option value="" disabled selected>Where to next?</option>
+            </select>
+        </div>
+        <button onclick="redirectToDiscovery()">&#10132;</button>
+    </div>
+</section>
+
+<script src="components.js"></script>
+<script>
+
+
+    async function populateDropdown() {
+        const response = await fetch("/data/availableCities.json");
+        const cities = await response.json();
+        const destinationDropdown = document.getElementById('destination');
+        cities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city;
+            option.textContent = city.charAt(0).toUpperCase() + city.slice(1);
+            destinationDropdown.appendChild(option);
+        });
+    }
+
+    function redirectToDiscovery() {
+        const destination = document.getElementById('destination').value;
+
+    
+        if (!destination) {
+            alert('Please select a destination.');
+            return;
+        }
+        
+    
+        localStorage.setItem('selectedCity', destination);
+        window.location.href = `discovery.html?destination=${encodeURIComponent(destination)}`;
+    }
+    
+
+    function goToProfile() {
+        window.location.href = 'profile.html';
+    }
+
+    function setDestination(destination) {
+        const destinationDropdown = document.getElementById('destination');
+        for (let option of destinationDropdown.options) {
+            if (option.value === destination.toLowerCase()) {
+                destinationDropdown.value = option.value;  
+                break; 
+            }
+        }
+    }
+
+    window.onload = async () => {
+        await populateDropdown();
+        addNavbarUtility();
+    }
+</script>
+
+<!-- Chatbot -->
+<div class="chatbot-icon" id="chatbotIcon" onclick="toggleChatbot()">
+    <img src="Photo/headset.png" alt="Chatbot">
+</div>
+
+
+<div style="display:none;" class="chatbot-window" id="chatbotWindow">
+    <div class="chatbot-header">
+        <h4>TerraVista Assistant</h4>
+        <button onclick="toggleChatbot()">
+            <i class="material-symbols-outlined">close</i>
+        </button>
+    </div>
+    <div class="chat-display-section" id="chatDisplaySection">
+    </div>
+    <div class="chat-write-section">
+        <textarea id="userInput" placeholder="How can we help you?" rows="3"></textarea>
+        <button class="send-prompt-btn" id="sendPromptBtn" onclick="handleSendMessageToChatBot()">Send</button>
+    </div>
+</div>
+
+<script>
+    function toggleChatbot() {
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        const chatbotIcon = document.getElementById('chatbotIcon');
+        chatbotWindow.style.display = chatbotWindow.style.display === 'flex' ? 'none' : 'flex';
+        chatbotIcon.style.display = chatbotIcon.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    async function handleSendMessageToChatBot(){
+        const prompt = document.getElementById('userInput').value;
+        const button = document.getElementById('sendPromptBtn');
+        button.disabled = true;
+        button.classList.add('disabled');
+
+        addMessageToChatDisplay(prompt, true);
+        const chatBotResponse = await sendPromptToChatBot(prompt);
+        if(chatBotResponse && chatBotResponse != "" && chatBotResponse.length > 0){
+            addMessageToChatDisplay(chatBotResponse, false);
+        }
+        else{
+            addMessageToChatDisplay('Sorry, I could not understand your request. Please try again.', false);
+        }
+
+        button.disabled = false;
+        button.classList.remove('disabled');
+    }
+
+    function addMessageToChatDisplay(prompt, isUserMessage) {
+        const chatDisplaySection = document.getElementById('chatDisplaySection');
+        const messageElement = document.createElement('p');
+        const userInput = document.getElementById('userInput');
+        messageElement.textContent = prompt;
+        messageElement.className = isUserMessage ? 'user-message' : 'bot-message';
+        chatDisplaySection.appendChild(messageElement);
+        userInput.value = "";
+    }
+
+    async function sendPromptToChatBot(prompt){
+        let chatResponse = "";
+        const response = await fetch('http://localhost:3000/api/send-prompt-to-chatbot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                prompt: prompt
+            },
+            body: JSON.stringify({ prompt })
+        }).then(response => response.json())
+        .then(data => {
+            data?.chatResponse.forEach(responsePart => {
+                chatResponse += responsePart.text;
+                chatResponse += "\n";
+            })
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+        return chatResponse;
+    }
+
+</script>
+
+<section>
+    <h2 class="section-title">Popular Destinations</h2>
+    <div class="destinations">
+        <div class="destination" onclick="setDestination('Istanbul')">
+            <img src="Photo/İstanbul.jpg" alt="Istanbul">
+            <h3>Istanbul</h3>
+        </div>
+        <div class="destination" onclick="setDestination('Ankara')">
+            <img src="Photo/ankara.jpg" alt="Ankara">
+            <h3>Ankara</h3>
+        </div>
+        <div class="destination" onclick="setDestination('Izmir')">
+            <img src="Photo/izmir.jpg" alt="Izmir">
+            <h3>Izmir</h3>
+        </div>
+        <!-- <div class="destination">
+            <img src="Photo/Bodrum.jpg" alt="Bodrum">
+            <h3>Bodrum</h3>
+        </div> -->
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2024 TerraVista - All rights reserved.</p>
+</footer>
+
+</body>
+</html>
